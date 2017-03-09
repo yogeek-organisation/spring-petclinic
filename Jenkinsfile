@@ -22,37 +22,36 @@ pipeline {
                 sleep 5
             }
         }
-    }
-    stage('acceptance-tests') {
-        steps {
+        stage('acceptance-tests') {
+            steps {
 
-            parallel chrome: {
-                node "test" {
-                    echo "acceptance - chrome"
-                }
-            },
-                    edge: {
-                        node("test") {
-                            echo "acceptance - edge"
-                        }
-                    },
-                    end: {
-                        node("test") {
-                            echo "acceptance - firefox"
-                        }
+                parallel chrome: {
+                    node "test" {
+                        echo "acceptance - chrome"
                     }
+                },
+                        edge: {
+                            node("test") {
+                                echo "acceptance - edge"
+                            }
+                        },
+                        end: {
+                            node("test") {
+                                echo "acceptance - firefox"
+                            }
+                        }
+            }
+
+        }
+
+
+        stage('manual-input') {
+            steps {
+                input "T'es sûr tu veux déployer?"
+            }
+
         }
 
     }
-
-
-    stage('manual-input') {
-        steps {
-            input "T'es sûr tu veux déployer?"
-        }
-
-    }
-
-}
 
 }
