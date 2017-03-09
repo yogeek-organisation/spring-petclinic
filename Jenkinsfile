@@ -24,17 +24,17 @@ pipeline {
             steps {
 
                 parallel chrome: {
-                    agent "test" {
+                    node "test" {
                         echo "acceptance - chrome"
                     }
                 },
                         edge: {
-                            agent("test") {
+                            node("test") {
                                 echo "acceptance - edge"
                             }
                         },
                         end: {
-                            agent("test") {
+                            node("test") {
                                 echo "acceptance - firefox"
                             }
                         }
