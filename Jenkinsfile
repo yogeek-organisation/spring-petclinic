@@ -13,43 +13,46 @@ pipeline {
         }
 
         stage('static-analysis') {
+            agent {
+                label 'build'
+            }
             steps {
-                agent 'build' {
-                    echo "Static !"
-                    sleep 5
+
+                echo "Static !"
+                sleep 5
+            }
+        }
+    }
+    stage('acceptance-tests') {
+        steps {
+
+            parallel chrome: {
+                node "test" {
+                    echo "acceptance - chrome"
                 }
-            }
-        }
-        stage('acceptance-tests') {
-            steps {
-
-                parallel chrome: {
-                    node "test" {
-                        echo "acceptance - chrome"
-                    }
-                },
-                        edge: {
-                            node("test") {
-                                echo "acceptance - edge"
-                            }
-                        },
-                        end: {
-                            node("test") {
-                                echo "acceptance - firefox"
-                            }
+            },
+                    edge: {
+                        node("test") {
+                            echo "acceptance - edge"
                         }
-            }
-
-        }
-
-
-        stage('manual-input') {
-            steps {
-                input "T'es sûr tu veux déployer?"
-            }
-
+                    },
+                    end: {
+                        node("test") {
+                            echo "acceptance - firefox"
+                        }
+                    }
         }
 
     }
+
+
+    stage('manual-input') {
+        steps {
+            input "T'es sûr tu veux déployer?"
+        }
+
+    }
+
+}
 
 }
